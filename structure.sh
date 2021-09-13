@@ -17,12 +17,12 @@ _changelog_ts() {
   ${date} -u '+%a, %d %b %Y %T %z'
 }
 
-structure_dirs() {
+deb_dirs() {
   ${mkdir} -p "$( pwd )/${PKG_NAME}/_build/debian/source"
   ${mkdir} -p "$( pwd )/${PKG_NAME}/${PKG_NAME}-${PKG_VER}"
 }
 
-debian_files() {
+deb_files() {
   ${cat} > "$( pwd )/${PKG_NAME}/_build/debian/source/format" <<EOF
 3.0 (quilt)
 
@@ -111,6 +111,6 @@ pack() {
     && popd || exit 1
 }
 
-structure_dirs && debian_files "$@" && obs_files && pack
+deb_dirs && deb_files "$@" && obs_files && pack
 
 exit 0

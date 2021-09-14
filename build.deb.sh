@@ -125,7 +125,7 @@ structure() {
   mkdir="$( command -v mkdir )"
   tar="$( command -v tar )"
 
-  _deb_dirs && _deb_files & _obs_files && _pack
+  _deb_dirs && _deb_files && _obs_files && _pack
 }
 
 "$@"

@@ -1,35 +1,27 @@
 #!/usr/bin/bash
 
-PKG_NAME="${1}"
-PKG_VER="${2}"
-PKG_ARCH="${3}"
-PKG_DEPENDS="${4}"
-
-PKG_VER_S="1"
-
-cat="$( command -v cat )"
-chmod="$( command -v chmod )"
-date="$( command -v date )"
-mkdir="$( command -v mkdir )"
-tar="$( command -v tar )"
+#PKG_NAME="${1}"
+#PKG_VER="${2}"
+#PKG_ARCH="${3}"
+#PKG_DEPENDS="${4}"
 
 _changelog_ts() {
   ${date} -u '+%a, %d %b %Y %T %z'
 }
 
-deb_dirs() {
+_deb_dirs() {
   ${mkdir} -p "$( pwd )/${PKG_NAME}/_build/debian/source"
   ${mkdir} -p "$( pwd )/${PKG_NAME}/${PKG_NAME}-${PKG_VER}"
 }
 
-deb_files() {
+_deb_files() {
   ${cat} > "$( pwd )/${PKG_NAME}/_build/debian/source/format" <<EOF
 3.0 (quilt)
 
 EOF
 
   ${cat} > "$( pwd )/${PKG_NAME}/_build/debian/changelog" <<EOF
-${PKG_NAME} (${PKG_VER}-${PKG_VER_S}) unstable; urgency=medium
+${PKG_NAME} (${PKG_VER}-${PKG_REV}) unstable; urgency=medium
 
   * Initial Release
 
@@ -39,8 +31,8 @@ EOF
 
   ${cat} > "$( pwd )/${PKG_NAME}/_build/debian/control" <<EOF
 Source: ${PKG_NAME}
-Section: admin
-Priority: optional
+Section: ${PKG_SECTION}
+Priority: ${PKG_PRIORITY}
 Maintainer: Package Store <kitsune.solar@gmail.com>
 Uploaders: Package Store <kitsune.solar@gmail.com>
 Build-Depends: debhelper (>= 13)
@@ -53,7 +45,7 @@ Rules-Requires-Root: no
 
 Package: ${PKG_NAME}
 Architecture: ${PKG_ARCH}
-Depends: ${PKG_DEPENDS}
+Depends: ${PKG_DEPENDS}, \${misc:Depends}
 Description: [${PKG_NAME^^}-HEADER]
  [${PKG_NAME^^}-BODY]
 
@@ -76,7 +68,7 @@ EOF
   ${chmod} +x "$( pwd )/${PKG_NAME}/_build/debian/rules"
 }
 
-obs_files() {
+_obs_files() {
   ${cat} > "$( pwd )/${PKG_NAME}/_meta" <<EOF
 <package name="${PKG_NAME}" project="home:pkgstore:deb-ext">
   <title/>
@@ -105,12 +97,37 @@ EOF
 EOF
 }
 
-pack() {
+_pack() {
   pushd "$( pwd )/${PKG_NAME}" \
     && ${tar} -cJf "${PKG_NAME}_${PKG_VER}.orig.tar.xz" "${PKG_NAME}-${PKG_VER}" \
     && popd || exit 1
 }
 
-deb_dirs && deb_files "$@" && obs_files && pack
+structure() {
+  echo -n "Package Name [ENTER]: "; read -r PKG_NAME
+  echo -n "Package Version (ex.: 1.0.0) [ENTER]: "; read -r PKG_VER
+  echo -n "Package Arch (ex.: all/any/amd64/i386) [ENTER]: "; read -r PKG_ARCH
+  echo -n "Package Depends (ex.: pkg1, pkg2, pkg3) [ENTER]: "; read -r PKG_DEPENDS
+  echo -n "Package Section (ex.: pkg1, pkg2, pkg3) [ENTER]: "; read -r PKG_SECTION
+  echo -n "Package Priority (ex.: pkg1, pkg2, pkg3) [ENTER]: "; read -r PKG_PRIORITY
+
+  [[ -z "${PKG_NAME}" ]] && PKG_NAME="ext-example-pkg"
+  [[ -z "${PKG_VER}" ]] && PKG_VER="1.0.0"
+  [[ -z "${PKG_ARCH}" ]] && PKG_ARCH="all"
+  [[ -z "${PKG_SECTION}" ]] && PKG_SECTION="admin"
+  [[ -z "${PKG_PRIORITY}" ]] && PKG_PRIORITY="optional"
+
+  PKG_REV="1"
+
+  cat="$( command -v cat )"
+  chmod="$( command -v chmod )"
+  date="$( command -v date )"
+  mkdir="$( command -v mkdir )"
+  tar="$( command -v tar )"
+
+  _deb_dirs && _deb_files & _obs_files && _pack
+}
+
+"$@"
 
 exit 0

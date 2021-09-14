@@ -22,7 +22,7 @@ structure() {
   mkdir="$( command -v mkdir )"
   tar="$( command -v tar )"
 
-  _deb_dirs && _deb_files && _obs_files && _pack
+  _deb_dirs && _deb_files && _obs_files && _ex_files && _pack
 }
 
 _changelog_ts() {
@@ -114,6 +114,20 @@ EOF
   </service>
 </services>
 
+EOF
+}
+
+_ex_files() {
+  ${cat} > "$( pwd )/${PKG_NAME}/${PKG_NAME}-${PKG_VER}/${PKG_NAME}.conf" <<EOF
+param1: 1
+param2: 2
+EOF
+
+  ${cat} > "$( pwd )/${PKG_NAME}/${PKG_NAME}-${PKG_VER}/${PKG_NAME}.sh" <<EOF
+#!/usr/bin/bash
+
+echo "Hello World!"
+exit 0
 EOF
 }
 

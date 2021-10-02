@@ -55,8 +55,7 @@ Section: ${PKG_SECTION}
 Priority: ${PKG_PRIORITY}
 Maintainer: Package Store <kitsune.solar@gmail.com>
 Uploaders: Package Store <kitsune.solar@gmail.com>
-Build-Depends: debhelper (>= 13)
-              ,debhelper-compat (= 13)
+Build-Depends: debhelper-compat (= 13)
 Standards-Version: 4.5.1
 Homepage: https://pkgstore.gitlab.io
 Vcs-Browser: https://github.com/pkgstore/linux-deb-${PKG_NAME}
@@ -109,8 +108,8 @@ EOF
   </service>
   <service name="tar" mode="buildtime"/>
   <service name="recompress" mode="buildtime">
-    <param name="compression">xz</param>
     <param name="file">*.tar</param>
+    <param name="compression">xz</param>
   </service>
 </services>
 

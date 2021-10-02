@@ -55,7 +55,7 @@ Maintainer: Package Store <kitsune.solar@gmail.com>
 Uploaders: Package Store <kitsune.solar@gmail.com>
 Build-Depends: debhelper-compat (= 13)
 Standards-Version: 4.5.1
-Homepage: https://pkgstore.gitlab.io
+Homepage: https://pkgstore.github.io
 Vcs-Browser: https://github.com/pkgstore/linux-deb-${PKG_NAME}
 Vcs-Git: https://github.com/pkgstore/linux-deb-${PKG_NAME}.git
 Rules-Requires-Root: no

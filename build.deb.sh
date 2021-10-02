@@ -37,7 +37,6 @@ _deb_dirs() {
 _deb_files() {
   ${cat} > "$( pwd )/${PKG_NAME}/_build/debian/source/format" <<EOF
 3.0 (quilt)
-
 EOF
 
   ${cat} > "$( pwd )/${PKG_NAME}/_build/debian/changelog" <<EOF
@@ -46,7 +45,6 @@ ${PKG_NAME} (${PKG_VER}-${PKG_REV}) unstable; urgency=medium
   * Initial Release
 
  -- Package Store <kitsune.solar@gmail.com>  $( _changelog_ts )
-
 EOF
 
   ${cat} > "$( pwd )/${PKG_NAME}/_build/debian/control" <<EOF
@@ -67,13 +65,11 @@ Architecture: ${PKG_ARCH}
 Depends: ${PKG_DEPENDS}, \${misc:Depends}
 Description: [${PKG_NAME^^}-HEADER]
  [${PKG_NAME^^}-BODY]
-
 EOF
 
   ${cat} > "$( pwd )/${PKG_NAME}/_build/debian/install" <<EOF
 *.conf etc/${PKG_NAME}
 *.sh usr/bin
-
 EOF
 
   ${cat} > "$( pwd )/${PKG_NAME}/_build/debian/rules" <<EOF
@@ -81,7 +77,6 @@ EOF
 
 %:
 	dh \$@
-
 EOF
 
   ${chmod} +x "$( pwd )/${PKG_NAME}/_build/debian/rules"
@@ -93,7 +88,6 @@ _obs_files() {
   <title/>
   <description/>
 </package>
-
 EOF
 
   ${cat} > "$( pwd )/${PKG_NAME}/_service" <<EOF
@@ -112,7 +106,6 @@ EOF
     <param name="compression">xz</param>
   </service>
 </services>
-
 EOF
 }
 
